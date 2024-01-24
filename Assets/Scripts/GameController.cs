@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private GameObject _chestInterface;
-    [SerializeField] private GameObject _inventoryInterface;
+    [Header("Объекты, которые до запуска игры выключены, но нужно включить во время запуска")]
+    [SerializeField] private GameObject _chestUI;
+    [SerializeField] private GameObject _inventoryUI;
 
     private void Start() {
-        _chestInterface.SetActive(true);
-        _inventoryInterface.SetActive(true);
+        _chestUI.SetActive(true);
+        _inventoryUI.SetActive(true);
     }
 }

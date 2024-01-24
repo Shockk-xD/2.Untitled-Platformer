@@ -4,12 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Chest
+  - Item
+  - Resource
+  - Obstacle
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Post Processing
   - Water
   - UI
   - Ground

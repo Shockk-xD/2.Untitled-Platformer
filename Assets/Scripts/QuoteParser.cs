@@ -1,32 +1,52 @@
+using System.Linq;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class QuoteParser : MonoBehaviour
 {
-    [SerializeField] private Animator _quoteParserAnimator;
-    [SerializeField] private Text _quoteText;
-    [SerializeField] private Text _quoteAutorText;
-    [SerializeField] private float _timeToShowQuote = 30f;
+    [SerializeField] private TextMeshPro _quoteTMP;
+    [SerializeField] private TextMeshPro _autorTMP;
+    [SerializeField] private float _duration;
+    private float _timer = 0;
+    private string[] _quotes;
+    private string[] _autors;
 
-    [Header("Цитаты")]
-    [SerializeField] private string[] _quotes;
-    [SerializeField] private string[] _quoteAutors;
+    private Animator _animator;
 
-    private float timer;
+    private void Awake() {
+        string path = "Quotes";
+        TextAsset textAsset = Resources.Load<TextAsset>(path);
+        if (textAsset != null) {
+            string[] lines = textAsset.text.Split('\n');
+            _quotes = new string[lines.Length];
+            _autors = new string[lines.Length];
+            for (int i = 0; i < lines.Length; i++) {
+                string quote = lines[i].Split(" -=- ").FirstOrDefault();
+                string autor = lines[i].Split(" -=- ").LastOrDefault();
+                _quotes[i] = quote;
+                _autors[i] = autor;
+            }
+        }
+    }
 
     private void Start() {
-        timer = _timeToShowQuote;
+        _animator = GetComponent<Animator>();
     }
 
     private void Update() {
-        if (timer > 0) 
-            timer -= Time.deltaTime;
-        else {
-            int rand = Random.Range(0, _quotes.Length);
-            _quoteText.text = $"\"{_quotes[rand]}\"";
-            _quoteAutorText.text = $"- {_quoteAutors[rand]}";
-            _quoteParserAnimator.SetTrigger("ShowQuote");
-            timer = _timeToShowQuote;
+        _timer += Time.deltaTime;
+        
+        if (_timer > _duration) {
+            int randIndex = Random.Range(0, _quotes.Length);
+            string quote = _quotes[randIndex];
+            string autor = _autors[randIndex];
+
+            _quoteTMP.text = $"\"{quote}\"";
+            _autorTMP.text = $"- {autor}";
+
+            _animator.SetTrigger("Open");
+
+            _timer = 0;
         }
     }
 }
