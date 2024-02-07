@@ -58,7 +58,7 @@ public class Trader : MonoBehaviour
         if (_currentItemIndex == 0) {
             if (_player.TryRemoveResource(ResourceInventory.Resource.Wood, 1)) {
                 _player.TryAddItem(_speedStaffItem);
-                _tradeShop.SetBool("IsOpen", false);
+                CloseShop();
             } else
                 StartCoroutine(ButtonTextAnimator());
 
@@ -73,5 +73,9 @@ public class Trader : MonoBehaviour
         _buyButtonAnimator.SetTrigger("Cancel");
         yield return new WaitForSeconds(0.85f);
         _buyButtonAnimator.GetComponentInChildren<Text>().text = "Купить";
+    }
+
+    public void CloseShop() {
+        _tradeShop.SetBool("IsOpen", false);
     }
 }

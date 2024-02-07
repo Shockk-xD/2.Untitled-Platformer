@@ -25,6 +25,7 @@ public class FloatingButtonController : MonoBehaviour {
         if (onClick != null)
             _floatingButton.GetComponent<Button>().onClick.AddListener(onClick);
         _floatingButton.GetComponent<Button>().onClick.AddListener(() => {
+            Vibrator.MediumVibration();
             if (isErrorPresent)
                 _floatingButtonAnimator.SetTrigger("Error");
             _floatingButtonAnimator.SetBool("FButtonIsOpen", false);
@@ -35,7 +36,7 @@ public class FloatingButtonController : MonoBehaviour {
     private void OnTriggerExit2D(Collider2D collision) {
         if (collision == null || !collision.CompareTag("Player")) return;
         triggerExitAction?.Invoke();
-        _floatingButton.GetComponent<Button>().onClick.RemoveListener(onClick);
+        _floatingButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _floatingButtonAnimator.SetBool("FButtonIsOpen", false);
     }
 }
