@@ -34,9 +34,10 @@ public class ChestSystem : MonoBehaviour
     private void OpenChest() {
         FillChest();
         _chestUIAnimator.SetBool("ChestIsOpen", true);
+        AmbientSoundController.instance.PlaySound(AmbientSoundController.Sound.ChestOpen);
     }
 
-    private void CloseChest() {
+    public void CloseChest() {
         _chestUIAnimator.SetBool("ChestIsOpen", false);
         ClearChest();
     }

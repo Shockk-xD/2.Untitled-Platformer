@@ -32,9 +32,11 @@ public class MazePlayerController : MonoBehaviour
     private IEnumerator ActionAfterWin() {
         yield return new WaitForSeconds(2f);
         this.GetComponent<SpriteRenderer>().enabled = false;
+        Vibrator.MediumVibration();
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < _forDelete.Length; i++) {
             Destroy(_forDelete[i]);
+            Vibrator.MediumVibration();
             yield return new WaitForSeconds(1f);
         }
     }

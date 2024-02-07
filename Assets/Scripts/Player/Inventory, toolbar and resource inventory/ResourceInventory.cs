@@ -45,6 +45,9 @@ public class ResourceInventory : MonoBehaviour
                 if (Woods >= count) {
                     Woods -= count;
                     _inventoryUI.UpdateUI();
+
+                    if (Woods == 0)
+                        _woodsUIAnimator.SetBool("WoodsUIIsOpen", false);
                     return true;
                 }
                 break;

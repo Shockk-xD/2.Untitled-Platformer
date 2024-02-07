@@ -1,12 +1,18 @@
-using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private float _jumpForce;
+    public float Speed { get; set; } = 3;
+    public float JumpForce { get; set; } = 4;
+
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private Transform _playerFeetPosition;
+
+    [SerializeField] private AudioSource _playerAudio;
+    [SerializeField] private AudioSource _jumpAudio;
+    [SerializeField] private AudioClip _jumpClip;
+
+    [SerializeField] private Joystick _joystick;
 
     private Rigidbody2D _rb;
     private Animator _animator;
@@ -23,12 +29,13 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update() {
-        Jump();
+        CheckJump();
     }
 
     private void Run() {
-        _inputValue = Input.GetAxis("Horizontal");
-        _rb.velocity = new Vector2(_inputValue * _speed, _rb.velocity.y);
+        _inputValue = _joystick.Horizontal;
+        _rb.velocity = new Vector2(_inputValue * Speed, _rb.velocity.y);
+
 
         if (_inputValue > 0 && _rb.transform.eulerAngles.y == 180) {
             _rb.transform.eulerAngles = Vector3.zero;
@@ -36,21 +43,27 @@ public class PlayerController : MonoBehaviour
             _rb.transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
+        if (_inputValue != 0) {
+            float randPitch = Random.Range(1f, 1.5f);
+            _playerAudio.pitch = randPitch;
+        }
+        _playerAudio.volume = Mathf.Abs(_inputValue);
+        _playerAudio.mute = !_isGrounded;
+
         _animator.SetBool("IsRunning", _inputValue != 0);
     }
 
-    private void Jump() {
+    private void CheckJump() {
         _isGrounded = Physics2D.OverlapCircle(_playerFeetPosition.transform.position, 0.3f, _groundLayer);
-
-        if (_isGrounded && Input.GetKeyDown(KeyCode.Space)) {
-            _rb.velocity = Vector2.up * _jumpForce;
-            _animator.SetTrigger("TakeOff");
-        }
-
         _animator.SetBool("IsJumping", !_isGrounded);
     }
 
-    public void SetSpeed(float speed) => _speed = speed;
+    public void Jump() {
+        if (_isGrounded) {
+            _rb.velocity = Vector2.up * JumpForce;
+            _animator.SetTrigger("TakeOff");
 
-    public void SetJumpForce(float jumpForce) => _jumpForce = jumpForce;
+            _jumpAudio.PlayOneShot(_jumpClip);
+        }
+    }
 }

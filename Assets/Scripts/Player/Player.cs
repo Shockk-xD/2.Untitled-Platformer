@@ -76,6 +76,9 @@ public class Player : MonoBehaviour
             case "Islands":
                 transform.position = new Vector2(266.46f, 1.91f);
                 break;
+            case "Islands2":
+                transform.position = new Vector2(303.96f, 1.65f);
+                break;
         }
 
         yield return new WaitForSeconds(1);

@@ -3,8 +3,7 @@ using UnityEngine;
 public class MiniGame : MonoBehaviour
 {
     [SerializeField] private GameObject _miniGamePrefab;
-    [SerializeField] private float xCorrection;
-    [SerializeField] private float yCorrection;
+    [SerializeField] private Vector2 _spawnPosition;
     [SerializeField] private Component _component; 
     private FloatingButtonController _floatingButtonController;
     private Collider2D _collider;
@@ -17,10 +16,7 @@ public class MiniGame : MonoBehaviour
     }
 
     private void Summon() {
-        Vector3 centerScreenPosition = Camera.main.ScreenToWorldPoint(new Vector3((Screen.width / 2), (Screen.height / 2), 1));
-        centerScreenPosition.x += xCorrection;
-        centerScreenPosition.y += yCorrection;
-        _miniGame = Instantiate(_miniGamePrefab, centerScreenPosition, Quaternion.identity);
+        _miniGame = Instantiate(_miniGamePrefab, _spawnPosition, Quaternion.identity);
         _collider.enabled = false;
     }
 
